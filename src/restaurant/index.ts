@@ -1,2 +1,7 @@
 export { RestaurantService } from './restaurant.service';
-export { RestaurantData } from './restaurant.type';
+export {
+  RestaurantData,
+  RestaurantTable,
+  RestaurantTableDocument,
+  RestaurantTableStatus,
+} from './restaurant.type';

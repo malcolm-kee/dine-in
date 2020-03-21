@@ -14,6 +14,6 @@ export class CustomerService {
   }
 
   getDetails(name: string) {
-    return this.restaurantService.getByName(name);
+    return this.restaurantService.getBySlug(name);
   }
 }

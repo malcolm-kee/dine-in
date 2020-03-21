@@ -7,6 +7,7 @@ export const RestaurantTableSchema = new mongoose.Schema<
   {
     label: String,
     numberOfSeat: Number,
+    status: String,
   },
   {
     timestamps: true,
@@ -15,7 +16,8 @@ export const RestaurantTableSchema = new mongoose.Schema<
 
 export const RestaurantSchema = new mongoose.Schema<RestaurantDocument>(
   {
-    name: {
+    name: String,
+    slug: {
       type: String,
       unique: true,
     },

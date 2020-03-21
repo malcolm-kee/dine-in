@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import {
-  RESTAURANT_SCHEMA_NAME,
-  RestaurantDocument,
-  RestaurantData,
-} from './restaurant.type';
 import { Model } from 'mongoose';
+import {
+  RestaurantData,
+  RestaurantDocument,
+  RESTAURANT_SCHEMA_NAME,
+} from './restaurant.type';
 
 @Injectable()
 export class RestaurantService {
@@ -19,22 +19,19 @@ export class RestaurantService {
     return restaurant.save();
   }
 
-  getByName(restaurantName: string) {
+  getBySlug(slug: string) {
     return this.restaurantModel
       .findOne({
-        name: restaurantName,
+        slug: slug,
       })
       .exec();
   }
 
   async update(restaurantData: RestaurantData) {
-    const restaurant = await this.restaurantModel
-      .findOne({
-        name: restaurantData.name,
-      })
-      .exec();
+    const restaurant = await this.getBySlug(restaurantData.slug);
 
     restaurant.tables = restaurantData.tables;
+    restaurant.name = restaurantData.name;
 
     return restaurant.save();
   }
