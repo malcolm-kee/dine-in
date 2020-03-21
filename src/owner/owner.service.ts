@@ -1,15 +1,15 @@
-import { Injectable } from '@nestjs/common';
-import { slugify } from 'src/lib/slugify';
 import {
   RestaurantData,
-  RestaurantService,
+  RestaurantDataService,
   RestaurantTable,
   RestaurantTableStatus,
-} from 'src/restaurant';
+} from '@app/restaurant-data';
+import { Injectable } from '@nestjs/common';
+import { slugify } from 'src/lib/slugify';
 
 @Injectable()
 export class OwnerService {
-  constructor(private readonly restaurantService: RestaurantService) {}
+  constructor(private readonly restaurantService: RestaurantDataService) {}
 
   register(data: Omit<RestaurantDataWithoutTableStatus, 'slug'>) {
     return this.restaurantService.create({

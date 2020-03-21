@@ -1,7 +1,7 @@
+import { RESTAURANT_CONNECTION_NAME, RESTAURANT_DB_URL } from '@app/const';
 import { Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { RESTAURANT_CONNECTION_NAME, RESTAURANT_DB_URL } from './app.type';
 import { CustomerModule } from './customer/customer.module';
 import { OwnerModule } from './owner/owner.module';
 

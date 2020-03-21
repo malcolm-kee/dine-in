@@ -1,3 +1,4 @@
+import { RestaurantTableStatus } from '@app/restaurant-data';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsArray,
@@ -9,7 +10,6 @@ import {
   IsString,
   ValidateNested,
 } from 'class-validator';
-import { RestaurantTableStatus } from 'src/restaurant';
 
 export class TableDto {
   @ApiProperty({

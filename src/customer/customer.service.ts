@@ -1,14 +1,14 @@
-import { Injectable } from '@nestjs/common';
 import {
+  RestaurantDataService,
   RestaurantReservationService,
-  RestaurantService,
   RestaurantTableDocument,
-} from 'src/restaurant';
+} from '@app/restaurant-data';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class CustomerService {
   constructor(
-    private readonly restaurantService: RestaurantService,
+    private readonly restaurantService: RestaurantDataService,
     private readonly reservationService: RestaurantReservationService,
   ) {}
 

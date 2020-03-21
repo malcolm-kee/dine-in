@@ -3,7 +3,7 @@ import {
   RestaurantDocument,
   RestaurantTableDocument,
   ReservationDocument,
-} from './restaurant.type';
+} from './restaurant-data.type';
 
 export const RestaurantTableSchema = new mongoose.Schema<
   RestaurantTableDocument

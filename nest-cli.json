@@ -1,4 +1,27 @@
 {
   "collection": "@nestjs/schematics",
-  "sourceRoot": "src"
+  "sourceRoot": "src",
+  "projects": {
+    "restaurant-data": {
+      "type": "library",
+      "root": "libs/restaurant-data",
+      "entryFile": "index",
+      "sourceRoot": "libs/restaurant-data/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/restaurant-data/tsconfig.lib.json"
+      }
+    },
+    "const": {
+      "type": "library",
+      "root": "libs/const",
+      "entryFile": "index",
+      "sourceRoot": "libs/const/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/const/tsconfig.lib.json"
+      }
+    }
+  },
+  "compilerOptions": {
+    "webpack": true
+  }
 }

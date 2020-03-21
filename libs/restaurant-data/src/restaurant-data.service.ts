@@ -1,19 +1,19 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Events } from '@app/const';
+import { Inject, Injectable } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import {
+  EVENT_HUB,
   RestaurantData,
   RestaurantDocument,
   RestaurantTableDocument,
-  RESTAURANT_SCHEMA_NAME,
-  EVENT_HUB,
   RestaurantTableStatus,
-} from './restaurant.type';
-import { ClientProxy } from '@nestjs/microservices';
-import { Events } from 'src/app.type';
+  RESTAURANT_SCHEMA_NAME,
+} from './restaurant-data.type';
 
 @Injectable()
-export class RestaurantService {
+export class RestaurantDataService {
   constructor(
     @InjectModel(RESTAURANT_SCHEMA_NAME)
     private readonly restaurantModel: Model<RestaurantDocument>,
