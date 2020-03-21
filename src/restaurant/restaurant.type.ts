@@ -19,3 +19,20 @@ export type RestaurantData = {
 export type RestaurantDocument = RestaurantData & Document;
 
 export const RESTAURANT_SCHEMA_NAME = 'Restaurant';
+
+export type ReservationStatus = 'closed' | 'active';
+
+export type Reservation = {
+  status: ReservationStatus;
+  /**
+   * Queue number is for user to know how many people are in front them,
+   * and it is duplicated as it will be refresh everyday.
+   *
+   */
+  queueNum: number;
+  pax: number;
+};
+
+export type ReservationDocument = Reservation & Document;
+
+export const RESERVATION_SCHEMA_NAME = 'Reservation';

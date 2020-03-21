@@ -1,14 +1,12 @@
-export class TableDto {
-  readonly label: string;
-  readonly numberOfSeat: number;
-}
+import { IsNumber, IsPositive } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateAccountDto {
-  readonly name: string;
-  readonly tables: TableDto[];
-}
-
-export class UpdateAccountDto {
-  readonly name: string;
-  readonly tables: TableDto[];
+export class RequestSeatDto {
+  @ApiProperty({
+    description: 'Number of pax',
+    example: 3,
+  })
+  @IsNumber()
+  @IsPositive()
+  readonly pax: number;
 }

@@ -1,3 +1,4 @@
+export { RestaurantReservationService } from './restaurant-reservation.service';
 export { RestaurantService } from './restaurant.service';
 export {
   RestaurantData,

@@ -1,5 +1,9 @@
 import * as mongoose from 'mongoose';
-import { RestaurantDocument, RestaurantTableDocument } from './restaurant.type';
+import {
+  RestaurantDocument,
+  RestaurantTableDocument,
+  ReservationDocument,
+} from './restaurant.type';
 
 export const RestaurantTableSchema = new mongoose.Schema<
   RestaurantTableDocument
@@ -24,4 +28,15 @@ export const RestaurantSchema = new mongoose.Schema<RestaurantDocument>(
     tables: [RestaurantTableSchema],
   },
   { timestamps: true },
+);
+
+export const ReservationSchema = new mongoose.Schema<ReservationDocument>(
+  {
+    status: String,
+    queueNum: Number,
+    pax: Number,
+  },
+  {
+    timestamps: true,
+  },
 );

@@ -1,9 +1,13 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { RESTAURANT_CONNECTION_NAME } from 'src/app.type';
-import { RestaurantSchema } from './restaurant.schema';
+import { RestaurantReservationService } from './restaurant-reservation.service';
+import { ReservationSchema, RestaurantSchema } from './restaurant.schema';
 import { RestaurantService } from './restaurant.service';
-import { RESTAURANT_SCHEMA_NAME } from './restaurant.type';
+import {
+  RESERVATION_SCHEMA_NAME,
+  RESTAURANT_SCHEMA_NAME,
+} from './restaurant.type';
 
 @Module({
   imports: [
@@ -13,11 +17,15 @@ import { RESTAURANT_SCHEMA_NAME } from './restaurant.type';
           name: RESTAURANT_SCHEMA_NAME,
           schema: RestaurantSchema,
         },
+        {
+          name: RESERVATION_SCHEMA_NAME,
+          schema: ReservationSchema,
+        },
       ],
       RESTAURANT_CONNECTION_NAME,
     ),
   ],
-  providers: [RestaurantService],
-  exports: [RestaurantService],
+  providers: [RestaurantService, RestaurantReservationService],
+  exports: [RestaurantService, RestaurantReservationService],
 })
 export class RestaurantModule {}

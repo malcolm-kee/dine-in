@@ -1,12 +1,16 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body } from '@nestjs/common';
 import { CustomerService } from './customer.service';
+import { RequestSeatDto } from './customer.dto';
 
-@Controller('owner')
+@Controller('customer')
 export class CustomerController {
   constructor(private readonly customerService: CustomerService) {}
 
-  @Get(':slug')
-  getDetails(@Param('slug') slug: string) {
-    return this.customerService.getDetails(slug);
+  @Post(':restaurant')
+  requestSeats(
+    @Param('restaurant') restaurant: string,
+    @Body() requestSeatDto: RequestSeatDto,
+  ) {
+    return this.customerService.requestSeats(restaurant, requestSeatDto.pax);
   }
 }
