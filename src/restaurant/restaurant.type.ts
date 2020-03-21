@@ -16,7 +16,10 @@ export type RestaurantData = {
   tables: Array<RestaurantTable>;
 };
 
-export type RestaurantDocument = RestaurantData & Document;
+export type RestaurantDocument = Document &
+  Omit<RestaurantData, 'tables'> & {
+    tables: RestaurantTableDocument[];
+  };
 
 export const RESTAURANT_SCHEMA_NAME = 'Restaurant';
 

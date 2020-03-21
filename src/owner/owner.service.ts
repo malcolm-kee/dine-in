@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
+import { slugify } from 'src/lib/slugify';
 import {
-  RestaurantService,
   RestaurantData,
+  RestaurantService,
   RestaurantTable,
   RestaurantTableStatus,
-  RestaurantTableDocument,
 } from 'src/restaurant';
-import { slugify } from 'src/lib/slugify';
 
 @Injectable()
 export class OwnerService {
@@ -31,15 +30,18 @@ export class OwnerService {
     return this.restaurantService.getBySlug(restaurantSlug);
   }
 
-  async updateTableStatus(data: UpdateTableData) {
-    const restaurantDoc = await this.getDetails(data.restaurantSlug);
-    (restaurantDoc.tables as RestaurantTableDocument[]).forEach(table => {
-      if (table._id.toString() === data.tableId) {
-        table.status = data.status;
-      }
-    });
-
-    return restaurantDoc.save();
+  updateTableStatus(data: UpdateTableData) {
+    if (data.status === 'vacant') {
+      return this.restaurantService.releaseTable(
+        data.restaurantSlug,
+        data.tableId,
+      );
+    } else {
+      return this.restaurantService.occupyTable(
+        data.restaurantSlug,
+        data.tableId,
+      );
+    }
   }
 }
 
