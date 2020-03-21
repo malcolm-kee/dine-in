@@ -34,6 +34,10 @@ export type Reservation = {
    */
   queueNum: number;
   pax: number;
+  /**
+   * slug of the restaurant
+   */
+  restaurant: string;
 };
 
 export type ReservationDocument = Reservation & Document;

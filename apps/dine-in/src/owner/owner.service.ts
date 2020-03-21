@@ -5,7 +5,7 @@ import {
   RestaurantTableStatus,
 } from '@app/restaurant-data';
 import { Injectable } from '@nestjs/common';
-import { slugify } from 'src/lib/slugify';
+import { slugify } from '../lib/slugify';
 
 @Injectable()
 export class OwnerService {

@@ -44,7 +44,7 @@ export class CustomerService {
 
     const reservation =
       remainingPax > 0
-        ? await this.reservationService.create(remainingPax)
+        ? await this.reservationService.create(restaurantSlug, remainingPax)
         : null;
 
     return {

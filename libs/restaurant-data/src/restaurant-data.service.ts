@@ -1,4 +1,4 @@
-import { Events } from '@app/const';
+import { CustomClientProxy, Events } from '@app/const';
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { InjectModel } from '@nestjs/mongoose';
@@ -41,7 +41,9 @@ export class RestaurantDataService {
 
     const latestData = await restaurant.save();
 
-    this.client.emit(Events.setup_changed, { restaurant: restaurantData.slug });
+    (this.client as CustomClientProxy).emit(Events.setup_changed, {
+      restaurant: restaurantData.slug,
+    });
 
     return latestData;
   }
@@ -51,20 +53,23 @@ export class RestaurantDataService {
     tableId: string,
     status: RestaurantTableStatus,
   ) {
-    const restaurant = await this.getBySlug(slug);
-    const table = restaurant.tables.find(
-      table => table._id.toString() === tableId,
+    const result = await this.restaurantModel.findOneAndUpdate(
+      {
+        slug,
+        'tables._id': tableId,
+      },
+      {
+        $set: {
+          'tables.$.status': status,
+        },
+      },
+      { new: true },
     );
-
-    if (table) {
-      table.status = status;
-      const latestData = await restaurant.save();
-      this.client.emit(
-        status === 'occupied' ? Events.table_occupied : Events.table_vacant,
-        { restaurant: slug, tableId },
-      );
-      return latestData;
-    }
+    (this.client as CustomClientProxy).emit(
+      status === 'occupied' ? Events.table_occupied : Events.table_vacant,
+      { restaurant: slug, tableId },
+    );
+    return result;
   }
 
   occupyTable(slug: string, tableId: string) {

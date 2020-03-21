@@ -35,6 +35,7 @@ export const ReservationSchema = new mongoose.Schema<ReservationDocument>(
     status: String,
     queueNum: Number,
     pax: Number,
+    restaurant: String,
   },
   {
     timestamps: true,

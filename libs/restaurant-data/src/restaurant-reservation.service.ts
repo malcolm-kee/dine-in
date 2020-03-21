@@ -1,4 +1,4 @@
-import { Events } from '@app/const';
+import { CustomClientProxy, Events } from '@app/const';
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { InjectModel } from '@nestjs/mongoose';
@@ -17,10 +17,11 @@ export class RestaurantReservationService {
     @Inject(EVENT_HUB) private readonly client: ClientProxy,
   ) {}
 
-  private async getNextQueueNum() {
+  private async getNextQueueNum(restaurant: string) {
     // TODO: potential race condition if multiple clients
     // don't bother about it for now as we have only one client
-    const currentCount = await this.reservationModel.count({
+    const currentCount = await this.reservationModel.countDocuments({
+      restaurant,
       createdAt: {
         $gte: getStartOfToday(),
       },
@@ -29,17 +30,19 @@ export class RestaurantReservationService {
     return currentCount + 1;
   }
 
-  async create(pax: number) {
-    const queueNum = await this.getNextQueueNum();
+  async create(restaurantSlug: string, pax: number) {
+    const queueNum = await this.getNextQueueNum(restaurantSlug);
 
     const reservation = await this.reservationModel.create({
       status: 'active',
       queueNum,
       pax,
+      restaurant: restaurantSlug,
     });
 
-    this.client.emit(Events.new_reservation, {
+    (this.client as CustomClientProxy).emit(Events.new_reservation, {
       id: reservation._id,
+      restaurant: restaurantSlug,
       queueNum,
       pax,
     });
@@ -47,10 +50,11 @@ export class RestaurantReservationService {
     return reservation;
   }
 
-  getNextActiveItem() {
+  getNextActiveItem(restaurant: string) {
     return this.reservationModel
       .find({
         status: 'active',
+        restaurant,
       })
       .sort({
         createdAt: 'asc',

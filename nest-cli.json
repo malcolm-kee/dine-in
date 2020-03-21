@@ -1,6 +1,6 @@
 {
   "collection": "@nestjs/schematics",
-  "sourceRoot": "src",
+  "sourceRoot": "apps/dine-in/src",
   "projects": {
     "restaurant-data": {
       "type": "library",
@@ -19,9 +19,30 @@
       "compilerOptions": {
         "tsConfigPath": "libs/const/tsconfig.lib.json"
       }
+    },
+    "dine-in": {
+      "type": "application",
+      "root": "apps/dine-in",
+      "entryFile": "main",
+      "sourceRoot": "apps/dine-in/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/dine-in/tsconfig.app.json"
+      }
+    },
+    "queue": {
+      "type": "application",
+      "root": "apps/queue",
+      "entryFile": "main",
+      "sourceRoot": "apps/queue/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/queue/tsconfig.app.json"
+      }
     }
   },
   "compilerOptions": {
-    "webpack": true
-  }
+    "webpack": true,
+    "tsConfigPath": "apps/dine-in/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/dine-in"
 }
