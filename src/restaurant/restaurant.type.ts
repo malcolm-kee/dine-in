@@ -39,3 +39,5 @@ export type Reservation = {
 export type ReservationDocument = Reservation & Document;
 
 export const RESERVATION_SCHEMA_NAME = 'Reservation';
+
+export const EVENT_HUB = 'EVENT_HUB';

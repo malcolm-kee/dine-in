@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import {
@@ -6,13 +6,18 @@ import {
   RestaurantDocument,
   RestaurantTableDocument,
   RESTAURANT_SCHEMA_NAME,
+  EVENT_HUB,
+  RestaurantTableStatus,
 } from './restaurant.type';
+import { ClientProxy } from '@nestjs/microservices';
+import { Events } from 'src/app.type';
 
 @Injectable()
 export class RestaurantService {
   constructor(
     @InjectModel(RESTAURANT_SCHEMA_NAME)
     private readonly restaurantModel: Model<RestaurantDocument>,
+    @Inject(EVENT_HUB) private readonly client: ClientProxy,
   ) {}
 
   create(restaurantData: RestaurantData) {
@@ -34,30 +39,39 @@ export class RestaurantService {
     restaurant.tables = restaurantData.tables as RestaurantTableDocument[]; // mongoose will cast it correctly
     restaurant.name = restaurantData.name;
 
-    return restaurant.save();
+    const latestData = await restaurant.save();
+
+    this.client.emit(Events.setup_changed, { restaurant: restaurantData.slug });
+
+    return latestData;
   }
 
-  async occupyTable(slug: string, tableId: string) {
+  private async updateTable(
+    slug: string,
+    tableId: string,
+    status: RestaurantTableStatus,
+  ) {
     const restaurant = await this.getBySlug(slug);
     const table = restaurant.tables.find(
       table => table._id.toString() === tableId,
     );
 
     if (table) {
-      table.status = 'occupied';
-      return restaurant.save();
+      table.status = status;
+      const latestData = await restaurant.save();
+      this.client.emit(
+        status === 'occupied' ? Events.table_occupied : Events.table_vacant,
+        { restaurant: slug, tableId },
+      );
+      return latestData;
     }
   }
 
-  async releaseTable(slug: string, tableId: string) {
-    const restaurant = await this.getBySlug(slug);
-    const table = restaurant.tables.find(
-      table => table._id.toString() === tableId,
-    );
+  occupyTable(slug: string, tableId: string) {
+    return this.updateTable(slug, tableId, 'occupied');
+  }
 
-    if (table) {
-      table.status = 'vacant';
-      return restaurant.save();
-    }
+  releaseTable(slug: string, tableId: string) {
+    return this.updateTable(slug, tableId, 'vacant');
   }
 }

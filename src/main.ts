@@ -1,13 +1,24 @@
 import { ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import { Transport } from '@nestjs/microservices';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: console,
   });
+
+  app.connectMicroservice({
+    transport: Transport.REDIS,
+    options: {
+      url: app.get(ConfigService).get('REDIS_URL'),
+    },
+  });
+
+  await app.startAllMicroservicesAsync();
+
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe());
 
