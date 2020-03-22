@@ -33,6 +33,8 @@ export type EventPayload = {
   reservation_fulfilled: {
     id: string;
     restaurant: string;
+    queueNum: number;
+    tableNames: string[];
   };
 };
 

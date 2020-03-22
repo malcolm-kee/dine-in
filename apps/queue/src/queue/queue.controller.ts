@@ -43,6 +43,8 @@ export class QueueController {
         (this.client as CustomClientProxy).emit('reservation_fulfilled', {
           id: nextReservation._id,
           restaurant: data.restaurant,
+          queueNum: nextReservation.queueNum,
+          tableNames: availableTables.map(table => table.label),
         });
       }
     }
