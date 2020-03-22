@@ -18,6 +18,17 @@ export class CustomerService {
 
   async requestSeats(restaurantSlug: string, pax: number) {
     // TODO: edge-case of paxNumber > total number of seat
+    const nextReservationInQueue = await this.reservationService.getNextActiveItem(
+      restaurantSlug,
+    );
+
+    if (nextReservationInQueue) {
+      return {
+        confirmedTables: [],
+        reservation: await this.reservationService.create(restaurantSlug, pax),
+      };
+    }
+
     const restaurant = await this.restaurantService.getBySlug(restaurantSlug);
     let remainingPax = pax;
     const confirmedTables: RestaurantTableDocument[] = [];
