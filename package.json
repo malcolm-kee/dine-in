@@ -9,6 +9,8 @@
     "prebuild": "rimraf dist",
     "build": "npm run build:apps && npm run build:scripts",
     "build:apps": "nest build && nest build queue",
+    "build:rest": "nest build",
+    "build:queue": "nest build queue",
     "build:scripts": "webpack --config scripts/webpack.config.js",
     "start": "concurrently \"npm:start:rest:dev\" \"npm:start:queue:dev\" \"npm:start:scripts:dev\"",
     "start:rest:dev": "nest start --watch",

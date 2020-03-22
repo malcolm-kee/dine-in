@@ -1,0 +1,48 @@
+version: '3'
+services:
+  rest:
+    build:
+      context: .
+      dockerfile: docker-config/rest.Dockerfile
+    links:
+      - db
+      - msg
+    deploy:
+      replicas: 3
+    environment:
+      RESTAURANT_DB_URL: mongodb://db:27017/restaurant
+      REDIS_URL: redis://msg:6379
+  queue:
+    build:
+      context: .
+      dockerfile: docker-config/queue.Dockerfile
+    links:
+      - db
+      - msg
+    environment:
+      RESTAURANT_DB_URL: mongodb://db:27017/restaurant
+      REDIS_URL: redis://msg:6379
+  socket:
+    build:
+      context: .
+      dockerfile: docker-config/socket.Dockerfile
+    links:
+      - msg
+    deploy:
+      replicas: 3
+    environment:
+      REDIS_URL: redis://msg:6379
+  nginx:
+    image: nginx:1.16.1-alpine
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - rest
+      - socket
+    ports:
+      - '4000:4000'
+      - '8080:8080'
+  db:
+    image: mongo:3
+  msg:
+    image: redis:4.0-alpine

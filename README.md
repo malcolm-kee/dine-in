@@ -4,6 +4,18 @@ Web service for restaurant seating management system.
 
 ## Get Started
 
+### Using Docker
+
+```bash
+docker-compose --compatibility up -d
+```
+
+This will starts 3 Rest API services with 3 WebSocket servers with Nginx as load-balancer in front of them.
+
+> You can shutdown the services with the command `docker-compose down`
+
+### Manual Installation
+
 1. Install the following software if not available in your machine:
 
    - MongoDB
