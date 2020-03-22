@@ -11,7 +11,7 @@ There are two ways to start the services of this project:
 
 ### Using Docker
 
-If you already have Docker installed with `docker-compose`, you can install and starts the services with:
+If you already have Docker installed with `docker-compose`, you can install and start the services with:
 
 ```bash
 docker-compose --compatibility up -d
