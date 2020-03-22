@@ -4,7 +4,14 @@ Web service for restaurant seating management system.
 
 ## Get Started
 
+There are two ways to start the services of this project:
+
+1. Using Docker (recommended)
+1. Manual Installation
+
 ### Using Docker
+
+If you already have Docker installed with `docker-compose`, you can install and starts the services with:
 
 ```bash
 docker-compose --compatibility up -d
