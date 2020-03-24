@@ -33,7 +33,7 @@ export class RestaurantDataService {
       .exec();
   }
 
-  async update(restaurantData: RestaurantData) {
+  async update(restaurantData: Omit<RestaurantData, 'ownerId'>) {
     const restaurant = await this.getBySlug(restaurantData.slug);
 
     restaurant.tables = restaurantData.tables as RestaurantTableDocument[]; // mongoose will cast it correctly

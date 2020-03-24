@@ -14,6 +14,7 @@ export type RestaurantData = {
   name: string;
   slug: string;
   tables: Array<RestaurantTable>;
+  ownerId: string;
 };
 
 export type RestaurantDocument = Document &

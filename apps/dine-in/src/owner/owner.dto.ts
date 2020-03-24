@@ -9,6 +9,7 @@ import {
   IsPositive,
   IsString,
   ValidateNested,
+  MinLength,
 } from 'class-validator';
 
 export class TableDto {
@@ -37,6 +38,22 @@ export class CreateAccountDto {
   @IsString()
   @IsNotEmpty()
   readonly name: string;
+
+  @ApiProperty({
+    description: 'Username for the restaurant',
+    example: 'kk-168',
+  })
+  @IsString()
+  @MinLength(5)
+  readonly username: string;
+
+  @ApiProperty({
+    description: 'Password to login as owner for the restaurant',
+    example: 'a8s73nasdf038',
+  })
+  @IsString()
+  @MinLength(8)
+  readonly password: string;
 
   @ApiProperty({
     description: 'Table setup for the restaurant',

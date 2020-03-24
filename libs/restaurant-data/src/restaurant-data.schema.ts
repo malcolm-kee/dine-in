@@ -26,6 +26,10 @@ export const RestaurantSchema = new mongoose.Schema<RestaurantDocument>(
       unique: true,
     },
     tables: [RestaurantTableSchema],
+    ownerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
   },
   { timestamps: true },
 );

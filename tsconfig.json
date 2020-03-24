@@ -23,6 +23,12 @@
       ],
       "@app/const/*": [
         "libs/const/src/*"
+      ],
+      "@app/auth": [
+        "libs/auth/src"
+      ],
+      "@app/auth/*": [
+        "libs/auth/src/*"
       ]
     }
   },
