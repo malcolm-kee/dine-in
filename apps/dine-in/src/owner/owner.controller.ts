@@ -14,7 +14,7 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiOperation, ApiSecurity, ApiBearerAuth } from '@nestjs/swagger';
 import {
   CreateAccountDto,
   UpdateAccountDto,
@@ -55,6 +55,7 @@ export class OwnerController {
   @ApiOperation({
     summary: 'Get restaurants owned by authenticated user',
   })
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get('restaurants')
   getOwnedRestaurants(@Request() req: AuthenticatedRequest) {
@@ -64,6 +65,7 @@ export class OwnerController {
   @ApiOperation({
     summary: 'Update setting of a restaurant',
   })
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Put()
   updateSetting(
@@ -79,6 +81,7 @@ export class OwnerController {
   @ApiOperation({
     summary: 'Update table status',
   })
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Put('table/:slug')
   updateTableStatus(
@@ -105,6 +108,7 @@ export class OwnerController {
   @ApiOperation({
     summary: 'Get your user profile',
   })
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   getProfile(@Request() req: AuthenticatedRequest) {
