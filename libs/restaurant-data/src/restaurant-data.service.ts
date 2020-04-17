@@ -33,6 +33,14 @@ export class RestaurantDataService {
       .exec();
   }
 
+  getByOwnerId(ownerId: string) {
+    return this.restaurantModel
+      .find({
+        ownerId,
+      })
+      .exec();
+  }
+
   async update(restaurantData: Omit<RestaurantData, 'ownerId'>) {
     const restaurant = await this.getBySlug(restaurantData.slug);
 

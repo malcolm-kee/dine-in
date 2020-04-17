@@ -58,6 +58,10 @@ export class OwnerService {
     return this.restaurantService.getBySlug(restaurantSlug);
   }
 
+  getOwnedRestaurants(userId: string) {
+    return this.restaurantService.getByOwnerId(userId);
+  }
+
   async updateTableStatus(data: UpdateTableData) {
     const restaurant = await this.restaurantService.getBySlug(
       data.restaurantSlug,

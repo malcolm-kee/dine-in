@@ -53,6 +53,15 @@ export class OwnerController {
   }
 
   @ApiOperation({
+    summary: 'Get restaurants owned by authenticated user',
+  })
+  @UseGuards(JwtAuthGuard)
+  @Get('restaurants')
+  getOwnedRestaurants(@Request() req: AuthenticatedRequest) {
+    return this.ownerService.getOwnedRestaurants(req.user.userId);
+  }
+
+  @ApiOperation({
     summary: 'Update setting of a restaurant',
   })
   @UseGuards(JwtAuthGuard)
