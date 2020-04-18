@@ -1,8 +1,8 @@
 {
   "name": "dine-in",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Web service for restaurant seating management system.",
+  "author": "Malcolm Kee <malcolm.keeweesiong@gmail.com>",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -15,6 +15,7 @@
     "start": "concurrently \"npm:start:rest:dev\" \"npm:start:queue:dev\" \"npm:start:scripts:dev\"",
     "start:rest:dev": "nest start --watch",
     "start:queue:dev": "nest start queue --watch",
+    "start:socket:dev": "nest start socket --watch",
     "start:scripts:dev": "npm run build:scripts && npm run start:scripts",
     "start:debug": "nest start --debug --watch",
     "start:scripts": "node dist/scripts/socket",
@@ -31,7 +32,9 @@
     "@nestjs/mongoose": "^6.4.0",
     "@nestjs/passport": "^7.0.0",
     "@nestjs/platform-express": "^7.0.0",
+    "@nestjs/platform-ws": "^7.0.8",
     "@nestjs/swagger": "^4.4.0",
+    "@nestjs/websockets": "^7.0.8",
     "class-transformer": "^0.2.3",
     "class-validator": "^0.11.1",
     "dotenv": "^8.2.0",
