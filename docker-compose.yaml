@@ -12,6 +12,7 @@ services:
     environment:
       RESTAURANT_DB_URL: mongodb://db:27017/restaurant
       REDIS_URL: redis://msg:6379
+      JWT_SECRET: TEST_JWT_SECRET
   queue:
     build:
       context: .

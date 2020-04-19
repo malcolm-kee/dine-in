@@ -14,7 +14,7 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiSecurity, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import {
   CreateAccountDto,
   UpdateAccountDto,
@@ -26,7 +26,7 @@ import { OwnerService } from './owner.service';
 export class OwnerController {
   constructor(
     private readonly ownerService: OwnerService,
-    private readonly authService: AuthService,
+    private readonly authService: AuthService
   ) {}
 
   @ApiOperation({
@@ -70,7 +70,7 @@ export class OwnerController {
   @Put()
   updateSetting(
     @Request() req: AuthenticatedRequest,
-    @Body() updateAccountDto: UpdateAccountDto,
+    @Body() updateAccountDto: UpdateAccountDto
   ) {
     return this.ownerService.updateSetting({
       ...updateAccountDto,
@@ -87,7 +87,7 @@ export class OwnerController {
   updateTableStatus(
     @Request() req: AuthenticatedRequest,
     @Param('slug') slug: string,
-    @Body() updateTableDto: UpdateTableDto,
+    @Body() updateTableDto: UpdateTableDto
   ) {
     return this.ownerService.updateTableStatus({
       ...updateTableDto,
