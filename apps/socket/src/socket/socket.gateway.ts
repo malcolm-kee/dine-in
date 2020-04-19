@@ -61,49 +61,15 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.cleanupClient(client);
   }
 
-  broadCastAll() {
-    this.server.clients.forEach((client) => {
-      client.send(
-        JSON.stringify({
-          type: 'hello',
-        }),
-        (err) => {
-          if (err) {
-            console.error(err);
-          }
-        }
-      );
-    });
-  }
-
-  notifyEvent<Type extends keyof EventPayload>(type: Type, payload: EventPayload[Type]) {
+  notifyEvent<Type extends keyof EventPayload>(
+    type: Type,
+    payload: EventPayload[Type]
+  ) {
     const subs = this.restaurantSubscribers.get(payload.restaurant);
     if (subs) {
       const dataToClient = JSON.stringify({
         type,
         payload,
-      });
-
-      return Promise.all(
-        subs.map(
-          (sub) =>
-            new Promise((fulfill, reject) =>
-              sub.send(dataToClient, (err) => (err ? reject(err) : fulfill()))
-            )
-        )
-      );
-    }
-    return Promise.resolve();
-  }
-
-  notifyFulfilledReservation(
-    data: EventPayload['reservation_fulfilled']
-  ): Promise<unknown> {
-    const subs = this.restaurantSubscribers.get(data.restaurant);
-    if (subs) {
-      const dataToClient = JSON.stringify({
-        type: 'reservation_fulfilled',
-        payload: data,
       });
 
       return Promise.all(
