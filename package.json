@@ -19,6 +19,7 @@
     "start:rest:prod": "node dist/apps/dine-in/main",
     "start:queue:prod": "node dist/apps/queue/main",
     "start:socket:prod": "node dist/apps/socket/main",
+    "test:rest:e2e": "jest --config ./apps/dine-in/jest-e2e.json --runInBand --forceExit --coverage",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix"
   },
   "dependencies": {
@@ -69,6 +70,7 @@
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-import": "^2.20.1",
     "jest": "^25.1.0",
+    "mongodb-memory-server": "^6.5.2",
     "prettier": "^2.0.4",
     "supertest": "^4.0.2",
     "ts-jest": "^25.4.0",
