@@ -3,9 +3,10 @@ import type { Observable } from 'rxjs';
 export const RESTAURANT_CONNECTION_NAME = 'restaurants';
 export const RESTAURANT_DB_URL = 'RESTAURANT_DB_URL';
 export const REDIS_URL = 'REDIS_URL';
+export const WEBSOCKET_PORT = 'WEBSOCKET_PORT';
 export const JWT_SECRET = 'JWT_SECRET';
 
-export type WithId<Type> = Type & {_id: string}
+export type WithId<Type> = Type & { _id: string };
 
 export const Events = {
   setup_changed: 'setup_changed',
@@ -44,6 +45,6 @@ export type EventPayload = {
 export interface CustomClientProxy {
   emit<Pattern extends keyof EventPayload>(
     pattern: Pattern,
-    data: EventPayload[Pattern],
+    data: EventPayload[Pattern]
   ): Observable<unknown>;
 }

@@ -6,31 +6,44 @@ import {
   RestaurantTableStatus,
 } from '@app/restaurant-data';
 import {
+  ConflictException,
   Injectable,
-  UnauthorizedException,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
-import { slugify } from '../lib/slugify';
 import { isEqualId } from '../lib/equal-id';
+import { slugify } from '../lib/slugify';
 
 @Injectable()
 export class OwnerService {
   constructor(
     private readonly restaurantService: RestaurantDataService,
-    private readonly authService: AuthService,
+    private readonly authService: AuthService
   ) {}
 
   async register(
     data: Omit<RestaurantDataWithoutTableStatusAndOwnerId, 'slug'> &
-      Omit<User, 'userId'>,
+      Omit<User, 'userId'>
   ) {
     const { username, password, ...restaurantData } = data;
+
+    const restaurantSlug = slugify(restaurantData.name);
+
+    const currentRestaurant = await this.restaurantService.getBySlug(
+      restaurantSlug
+    );
+    if (currentRestaurant) {
+      throw new ConflictException({
+        message: ['Restaurant name already taken'],
+      });
+    }
+
     const user = await this.authService.createUser(username, password);
 
     const restaurant = await this.restaurantService.create({
       ...restaurantData,
       ownerId: user._id,
-      slug: slugify(restaurantData.name),
+      slug: restaurantSlug,
       tables: restaurantData.tables.map(resetTableStatus),
     });
 
@@ -64,7 +77,7 @@ export class OwnerService {
 
   async updateTableStatus(data: UpdateTableData) {
     const restaurant = await this.restaurantService.getBySlug(
-      data.restaurantSlug,
+      data.restaurantSlug
     );
     if (!restaurant) {
       throw new NotFoundException();
@@ -76,12 +89,12 @@ export class OwnerService {
     if (data.status === 'vacant') {
       return this.restaurantService.releaseTable(
         data.restaurantSlug,
-        data.tableId,
+        data.tableId
       );
     } else {
       return this.restaurantService.occupyTable(
         data.restaurantSlug,
-        data.tableId,
+        data.tableId
       );
     }
   }

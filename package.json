@@ -1,25 +1,24 @@
 {
   "name": "dine-in",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Web service for restaurant seating management system.",
+  "author": "Malcolm Kee <malcolm.keeweesiong@gmail.com>",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "npm run build:apps && npm run build:scripts",
-    "build:apps": "nest build && nest build queue",
+    "build": "npm run build:apps",
+    "build:apps": "nest build && nest build queue && nest build socket",
     "build:rest": "nest build",
     "build:queue": "nest build queue",
-    "build:scripts": "webpack --config scripts/webpack.config.js",
-    "start": "concurrently \"npm:start:rest:dev\" \"npm:start:queue:dev\" \"npm:start:scripts:dev\"",
+    "build:socket": "nest build socket",
+    "start": "concurrently \"npm:start:rest:dev\" \"npm:start:queue:dev\" \"npm:start:socket:dev\"",
     "start:rest:dev": "nest start --watch",
     "start:queue:dev": "nest start queue --watch",
-    "start:scripts:dev": "npm run build:scripts && npm run start:scripts",
-    "start:debug": "nest start --debug --watch",
-    "start:scripts": "node dist/scripts/socket",
+    "start:socket:dev": "nest start socket --watch",
     "start:rest:prod": "node dist/apps/dine-in/main",
     "start:queue:prod": "node dist/apps/queue/main",
+    "start:socket:prod": "node dist/apps/socket/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix"
   },
   "dependencies": {
@@ -31,7 +30,9 @@
     "@nestjs/mongoose": "^6.4.0",
     "@nestjs/passport": "^7.0.0",
     "@nestjs/platform-express": "^7.0.0",
+    "@nestjs/platform-ws": "^7.0.8",
     "@nestjs/swagger": "^4.4.0",
+    "@nestjs/websockets": "^7.0.8",
     "class-transformer": "^0.2.3",
     "class-validator": "^0.11.1",
     "dotenv": "^8.2.0",
@@ -68,7 +69,7 @@
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-import": "^2.20.1",
     "jest": "^25.1.0",
-    "prettier": "^1.19.1",
+    "prettier": "^2.0.4",
     "supertest": "^4.0.2",
     "ts-jest": "25.2.1",
     "ts-loader": "^6.2.1",
@@ -102,7 +103,9 @@
       "@app/const/(.*)": "<rootDir>/libs/const/src/$1",
       "@app/const": "<rootDir>/libs/const/src",
       "@app/auth/(.*)": "<rootDir>/libs/auth/src/$1",
-      "@app/auth": "<rootDir>/libs/auth/src"
+      "@app/auth": "<rootDir>/libs/auth/src",
+      "@app/logger/(.*)": "<rootDir>/libs/logger/src/$1",
+      "@app/logger": "<rootDir>/libs/logger/src"
     }
   }
 }

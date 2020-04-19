@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ConflictException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from './user/user.service';
 import { User } from './user/user.type';
@@ -8,10 +8,17 @@ import { WithId } from '@app/const';
 export class AuthService {
   constructor(
     private readonly userService: UserService,
-    private readonly jwtService: JwtService,
+    private readonly jwtService: JwtService
   ) {}
 
-  createUser(username: string, password: string) {
+  async createUser(username: string, password: string) {
+    const currentUser = await this.userService.findOne(username);
+    if (currentUser) {
+      throw new ConflictException({
+        message: ['Username already taken.'],
+      });
+    }
+
     return this.userService.create({
       username,
       password,
