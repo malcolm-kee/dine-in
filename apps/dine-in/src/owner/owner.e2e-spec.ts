@@ -34,7 +34,7 @@ describe(`OwnerModule (e2e)`, () => {
 
     const httpServer = app.getHttpServer();
 
-    const testData = createOwnerTestdata(1);
+    const testData = createOwnerTestdata({ tableCount: 1 });
 
     await new Promise((fulfill, reject) => {
       supertest(httpServer)
@@ -116,6 +116,46 @@ describe(`OwnerModule (e2e)`, () => {
     });
 
     expect(finalResult.tables[0]).toHaveProperty('status', 'occupied');
+  });
+
+  it(`allows update of settings`, async () => {
+    const httpServer = app.getHttpServer();
+    const supertestTest = supertest(httpServer);
+    const initialOwner = await createRestaurantAndLogin(supertestTest, {
+      name: 'KK Mart',
+      tableCount: 4,
+    });
+
+    await new Promise((fulfill, reject) => {
+      supertestTest
+        .put(`/owner`)
+        .send({
+          slug: initialOwner.slug,
+          name: 'Koko Mart',
+          tables: initialOwner.tables,
+        })
+        .set('Accept', 'application/json')
+        .set('Content-Type', 'application/json')
+        .set('Authorization', `Bearer ${initialOwner.accessToken}`)
+        .expect(200)
+        .end((err, res) => {
+          if (err) return reject(err);
+          fulfill(res.body);
+        });
+    });
+
+    const finalResult = await new Promise<RestaurantData>((fulfill, reject) => {
+      supertestTest
+        .get(`/owner/setting/${initialOwner.slug}`)
+        .set('Accept', 'application/json')
+        .expect(200)
+        .end((err, res) => {
+          if (err) return reject(err);
+          fulfill(res.body);
+        });
+    });
+
+    expect(finalResult).toHaveProperty('name', 'Koko Mart');
   });
 });
 

@@ -3,22 +3,44 @@
 import { RestaurantData } from '@app/restaurant-data/restaurant-data.type';
 import type { SuperTest, Test } from 'supertest';
 
-export const createOwnerTestdata = (tableCount: number) => {
+type CreateOwnerOptions = {
+  name?: string;
+  username?: string;
+  password?: string;
+  tables?: Array<{
+    label: string;
+    numberOfSeat: number;
+  }>;
+  tableCount?: number;
+};
+
+export const createOwnerTestdata = ({
+  name = 'Malcolm Cafe',
+  username = 'malcolm-kee',
+  password = 'abc1234567',
+  tableCount = 3,
+  tables,
+}: CreateOwnerOptions = {}) => {
   return {
-    name: 'Malcolm Cafe',
-    username: 'malcolm-kee',
-    password: 'abc1234567',
-    tables: Array.from({
-      length: tableCount,
-    }).map((_, index) => ({
-      label: `T${index + 1}`,
-      numberOfSeat: 5,
-    })),
+    name,
+    username,
+    password,
+    tables:
+      tables ||
+      Array.from({
+        length: tableCount,
+      }).map((_, index) => ({
+        label: `T${index + 1}`,
+        numberOfSeat: 5,
+      })),
   };
 };
 
-export const createRestaurantAndLogin = async (test: SuperTest<Test>) => {
-  const testData = createOwnerTestdata(3);
+export const createRestaurantAndLogin = async (
+  test: SuperTest<Test>,
+  options?: CreateOwnerOptions
+) => {
+  const testData = createOwnerTestdata(options);
 
   const createResponse = await new Promise<RestaurantData>(
     (fulfill, reject) => {
