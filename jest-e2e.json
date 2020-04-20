@@ -9,6 +9,15 @@
     "testRegex": [
         "apps\\/.*\\.e2e-spec.ts$"
     ],
+    "collectCoverageFrom": [
+        "apps/**/*.ts",
+        "libs/**/*.ts"
+    ],
+    "coveragePathIgnorePatterns": [
+        "<rootDir>\\/.*.spec.ts$",
+        "<rootDir>\\/.*\\/main.ts$",
+        "<rootDir>\\/.*\\/app.module.ts$"
+    ],
     "transform": {
         "^.+\\.(t|j)s$": "ts-jest"
     },
