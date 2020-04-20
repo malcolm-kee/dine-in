@@ -1,5 +1,8 @@
 import { RESTAURANT_CONNECTION_NAME, WithId } from '@app/const';
-import { createOwnerTestdata } from '@app/const/test-helper';
+import {
+  createOwnerTestdata,
+  createRestaurantAndLogin,
+} from '@app/const/test-helper';
 import {
   RestaurantData,
   RestaurantTable,
@@ -9,7 +12,7 @@ import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import supertest, { SuperTest, Test as SuperTestTest } from 'supertest';
+import supertest from 'supertest';
 import { OwnerModule } from './owner.module';
 
 describe(`OwnerModule (e2e)`, () => {
@@ -80,7 +83,7 @@ describe(`OwnerModule (e2e)`, () => {
 
     const httpServer = app.getHttpServer();
     const supertestTest = supertest(httpServer);
-    const result = await simulateOwnerLogin(supertestTest);
+    const result = await createRestaurantAndLogin(supertestTest);
 
     const tableToUpdate = result.tables[0] as WithId<RestaurantTable>;
 
@@ -149,43 +152,3 @@ async function getApp(mongod: MongoMemoryServer) {
 
   return app;
 }
-
-const simulateOwnerLogin = async (supertest: SuperTest<SuperTestTest>) => {
-  const testData = createOwnerTestdata(3);
-
-  const createResponse = await new Promise<RestaurantData>(
-    (fulfill, reject) => {
-      supertest
-        .post('/owner')
-        .send(testData)
-        .set('Accept', 'application/json')
-        .set('Content-Type', 'application/json')
-        .end((err, res) => {
-          if (err) return reject(err);
-          fulfill(res.body);
-        });
-    }
-  );
-
-  const accessToken = await new Promise((fulfill, reject) => {
-    supertest
-      .post('/owner/login')
-      .send({
-        username: testData.username,
-        password: testData.password,
-      })
-      .set('Accept', 'application/json')
-      .set('Content-Type', 'application/json')
-      .end((err, res) => {
-        if (err) return reject(err);
-
-        fulfill(res.body.access_token);
-      });
-  });
-
-  return {
-    ...testData,
-    ...createResponse,
-    accessToken,
-  };
-};
