@@ -11,7 +11,7 @@ There are two ways to start the services of this project:
 
 ### Using Docker
 
-If you already have Docker installed with `docker-compose`, you can install and start the services with:
+If you already have Docker installed with Docker Compose, you can install and start the services with:
 
 ```bash
 docker-compose --compatibility up -d
@@ -41,6 +41,7 @@ This will starts 3 Rest API services with 3 WebSocket servers with Nginx as load
    PORT=4000
    REDIS_URL=redis://localhost:6379
    WEBSOCKET_PORT=8080
+   JWT_SECRET=Y0UR_JWT_S3CR3T
    ```
 
 1. Start all the services:
@@ -53,6 +54,14 @@ This will starts 3 Rest API services with 3 WebSocket servers with Nginx as load
 
 - Once the services started, you can explore the available REST endpoints at `<baseUrl>/api`, e.g. [http://localhost:4000/api](http://localhost:4000/api)
 - The Websocket endpoints is available at the port number following `WEBSOCKET_PORT` variable, e.g. `ws://localhost:8080`
+
+## Integration Testing
+
+You can run the integration testing between the application of the project with the following command:
+
+```bash
+yarn test:e2e
+```
 
 ## Built With
 
