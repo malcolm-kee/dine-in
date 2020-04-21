@@ -65,42 +65,30 @@ describe(`Integration (e2e)`, () => {
 
     for (const pax of bookingsPax) {
       // simulate customer request seats
-      await new Promise((fulfill, reject) => {
-        agent
-          .post(`/customer/${result.slug}`)
-          .send({
-            pax,
-          })
-          .set('Accept', 'application/json')
-          .set('Content-Type', 'application/json')
-          .set('Authorization', `Bearer ${result.accessToken}`)
-          .expect(201)
-          .end((err, res) => {
-            if (err) return reject(err);
-            fulfill(res.body);
-          });
-      });
+      await agent
+        .post(`/customer/${result.slug}`)
+        .send({
+          pax,
+        })
+        .set('Accept', 'application/json')
+        .set('Content-Type', 'application/json')
+        .set('Authorization', `Bearer ${result.accessToken}`)
+        .expect(201);
 
       await waitForMs(250);
     }
 
     for (const table of result.tables as Array<WithId<RestaurantTable>>) {
-      await new Promise((fulfill, reject) => {
-        agent
-          .put(`/owner/table/${result.slug}`)
-          .send({
-            tableId: table._id,
-            status: 'vacant',
-          })
-          .set('Accept', 'application/json')
-          .set('Content-Type', 'application/json')
-          .set('Authorization', `Bearer ${result.accessToken}`)
-          .expect(200)
-          .end((err, res) => {
-            if (err) return reject(err);
-            fulfill(res.body);
-          });
-      });
+      await agent
+        .put(`/owner/table/${result.slug}`)
+        .send({
+          tableId: table._id,
+          status: 'vacant',
+        })
+        .set('Accept', 'application/json')
+        .set('Content-Type', 'application/json')
+        .set('Authorization', `Bearer ${result.accessToken}`)
+        .expect(200);
 
       await waitForMs(250);
     }

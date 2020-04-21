@@ -42,35 +42,22 @@ export const createRestaurantAndLogin = async (
 ) => {
   const testData = createOwnerTestdata(options);
 
-  const createResponse = await new Promise<RestaurantData>(
-    (fulfill, reject) => {
-      agent
-        .post('/owner')
-        .send(testData)
-        .set('Accept', 'application/json')
-        .set('Content-Type', 'application/json')
-        .end((err, res) => {
-          if (err) return reject(err);
-          fulfill(res.body);
-        });
-    }
-  );
+  const createResponse: RestaurantData = await agent
+    .post('/owner')
+    .send(testData)
+    .set('Accept', 'application/json')
+    .set('Content-Type', 'application/json')
+    .then((res) => res.body);
 
-  const accessToken: string = await new Promise((fulfill, reject) => {
-    agent
-      .post('/owner/login')
-      .send({
-        username: testData.username,
-        password: testData.password,
-      })
-      .set('Accept', 'application/json')
-      .set('Content-Type', 'application/json')
-      .end((err, res) => {
-        if (err) return reject(err);
-
-        fulfill(res.body.access_token);
-      });
-  });
+  const accessToken: string = await agent
+    .post('/owner/login')
+    .send({
+      username: testData.username,
+      password: testData.password,
+    })
+    .set('Accept', 'application/json')
+    .set('Content-Type', 'application/json')
+    .then((res) => res.body.access_token);
 
   return {
     ...testData,
