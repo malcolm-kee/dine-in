@@ -47,6 +47,7 @@ export const createRestaurantAndLogin = async (
     .send(testData)
     .set('Accept', 'application/json')
     .set('Content-Type', 'application/json')
+    .expect(201)
     .then((res) => res.body);
 
   const accessToken: string = await agent

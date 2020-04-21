@@ -8,7 +8,7 @@ describe(`e2e`, () => {
     const agent = request.agent(apiUrl);
     const ownerDetails = await createRestaurantAndLogin(agent);
 
-    const response = agent
+    const response = await agent
       .get(`/owner/setting/${ownerDetails.slug}`)
       .set('Accept', 'application/json')
       .expect(200)
