@@ -1,5 +1,4 @@
 .env
-/mongo-volume
 
 # compiled output
 /dist

@@ -63,6 +63,14 @@ You can run the integration testing between the application of the project with 
 yarn test:e2e
 ```
 
+## E2E Testing
+
+You can run end-to-end testing between the applications in a docker containers with:
+
+```bash
+docker-compose -f docker-compose-test.yaml run e2etest
+```
+
 ## Built With
 
 - [NestJS](https://nestjs.com/)
