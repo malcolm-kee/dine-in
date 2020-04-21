@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [10.x, 12.x]
+        node-version: 12
 
     steps:
       - uses: actions/checkout@v1
@@ -19,6 +19,11 @@ jobs:
 
       - name: Install Dependencies
         run: yarn install
+
+      - name: Start Redis
+        uses: supercharge/redis-github-action@1.1.0
+        with:
+          redis-version: 4
 
       - name: Integration Testing
         run: yarn test:e2e
