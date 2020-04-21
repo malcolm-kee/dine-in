@@ -12,7 +12,7 @@ import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import supertest from 'supertest';
+import request from 'supertest';
 import { OwnerModule } from './owner.module';
 
 describe(`OwnerModule (e2e)`, () => {
@@ -37,7 +37,7 @@ describe(`OwnerModule (e2e)`, () => {
     const testData = createOwnerTestdata({ tableCount: 1 });
 
     await new Promise((fulfill, reject) => {
-      supertest(httpServer)
+      request(httpServer)
         .post('/owner')
         .send(testData)
         .set('Accept', 'application/json')
@@ -50,7 +50,7 @@ describe(`OwnerModule (e2e)`, () => {
     });
 
     await new Promise((fulfill, reject) => {
-      supertest(httpServer)
+      request(httpServer)
         .post('/owner/login')
         .send({
           username: testData.username,
@@ -82,13 +82,13 @@ describe(`OwnerModule (e2e)`, () => {
     expect.assertions(1);
 
     const httpServer = app.getHttpServer();
-    const supertestTest = supertest(httpServer);
-    const result = await createRestaurantAndLogin(supertestTest);
+    const agent = request.agent(httpServer);
+    const result = await createRestaurantAndLogin(agent);
 
     const tableToUpdate = result.tables[0] as WithId<RestaurantTable>;
 
     await new Promise((fulfill, reject) => {
-      supertestTest
+      agent
         .put(`/owner/table/${result.slug}`)
         .send({
           tableId: tableToUpdate._id,
@@ -105,7 +105,7 @@ describe(`OwnerModule (e2e)`, () => {
     });
 
     const finalResult = await new Promise<RestaurantData>((fulfill, reject) => {
-      supertestTest
+      agent
         .get(`/owner/setting/${result.slug}`)
         .set('Accept', 'application/json')
         .expect(200)
@@ -120,7 +120,7 @@ describe(`OwnerModule (e2e)`, () => {
 
   it(`allows update of settings`, async () => {
     const httpServer = app.getHttpServer();
-    const supertestTest = supertest(httpServer);
+    const supertestTest = request(httpServer);
     const initialOwner = await createRestaurantAndLogin(supertestTest, {
       name: 'KK Mart',
       tableCount: 4,

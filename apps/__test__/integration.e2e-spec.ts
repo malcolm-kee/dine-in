@@ -8,7 +8,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { WsAdapter } from '@nestjs/platform-ws';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import supertest from 'supertest';
+import request from 'supertest';
 import WebSocket from 'ws';
 import { CustomerModule } from '../dine-in/src/customer/customer.module';
 import { OwnerModule } from '../dine-in/src/owner/owner.module';
@@ -41,8 +41,8 @@ describe(`Integration (e2e)`, () => {
 
   test(`integration tests`, async () => {
     const server = restApp.getHttpServer();
-    const stest = supertest(server);
-    const result = await createRestaurantAndLogin(stest);
+    const agent = request.agent(server);
+    const result = await createRestaurantAndLogin(agent);
 
     const { port } = socketApp.getHttpServer().listen().address();
 
@@ -66,7 +66,7 @@ describe(`Integration (e2e)`, () => {
     for (const pax of bookingsPax) {
       // simulate customer request seats
       await new Promise((fulfill, reject) => {
-        stest
+        agent
           .post(`/customer/${result.slug}`)
           .send({
             pax,
@@ -86,7 +86,7 @@ describe(`Integration (e2e)`, () => {
 
     for (const table of result.tables as Array<WithId<RestaurantTable>>) {
       await new Promise((fulfill, reject) => {
-        stest
+        agent
           .put(`/owner/table/${result.slug}`)
           .send({
             tableId: table._id,

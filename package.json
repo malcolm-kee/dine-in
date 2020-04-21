@@ -21,6 +21,7 @@
     "start:socket:prod": "node dist/apps/socket/main",
     "test": "jest",
     "test:e2e": "jest --config ./jest-e2e.js --runInBand --forceExit --coverage",
+    "test:real": "jest --config ./jest-real.js --runInBand",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix"
   },
   "dependencies": {

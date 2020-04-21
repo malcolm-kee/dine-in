@@ -1,0 +1,45 @@
+version: '3'
+services:
+  rest:
+    build:
+      context: .
+      dockerfile: docker-config/rest.Dockerfile
+    links:
+      - db
+      - msg
+    environment:
+      RESTAURANT_DB_URL: mongodb://db:27017/restaurant
+      REDIS_URL: redis://msg:6379
+      JWT_SECRET: TEST_JWT_SECRET
+  queue:
+    build:
+      context: .
+      dockerfile: docker-config/queue.Dockerfile
+    links:
+      - db
+      - msg
+    environment:
+      RESTAURANT_DB_URL: mongodb://db:27017/restaurant
+      REDIS_URL: redis://msg:6379
+  socket:
+    build:
+      context: .
+      dockerfile: docker-config/socket.Dockerfile
+    links:
+      - msg
+    environment:
+      REDIS_URL: redis://msg:6379
+  e2etest:
+    build:
+      context: .
+      dockerfile: docker-config/e2e-test.Dockerfile
+    depends_on:
+      - rest
+      - socket
+    environment:
+      API_URL: http://rest:4000
+      SOCKET_URL: ws://socket:8080
+  db:
+    image: mongo:3
+  msg:
+    image: redis:4.0-alpine

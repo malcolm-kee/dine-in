@@ -37,14 +37,14 @@ export const createOwnerTestdata = ({
 };
 
 export const createRestaurantAndLogin = async (
-  test: SuperTest<Test>,
+  agent: SuperTest<Test>,
   options?: CreateOwnerOptions
 ) => {
   const testData = createOwnerTestdata(options);
 
   const createResponse = await new Promise<RestaurantData>(
     (fulfill, reject) => {
-      test
+      agent
         .post('/owner')
         .send(testData)
         .set('Accept', 'application/json')
@@ -57,7 +57,7 @@ export const createRestaurantAndLogin = async (
   );
 
   const accessToken: string = await new Promise((fulfill, reject) => {
-    test
+    agent
       .post('/owner/login')
       .send({
         username: testData.username,
