@@ -42,6 +42,6 @@ services:
   db:
     image: mongo:3
     volumes:
-      - ./mongo-volume:/data/db # specify where the data is so we can cleanup it
+      - ./mongo-volume:/data/db
   msg:
     image: redis:4.0-alpine
