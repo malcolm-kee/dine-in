@@ -41,7 +41,6 @@ services:
       SOCKET_URL: ws://socket:8080
   db:
     image: mongo:3
-    volumes:
-      - ./mongo-volume:/data/db
+    restart: always
   msg:
     image: redis:4.0-alpine
