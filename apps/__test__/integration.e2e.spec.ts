@@ -8,17 +8,11 @@ describe(`e2e`, () => {
     const agent = request.agent(apiUrl);
     const ownerDetails = await createRestaurantAndLogin(agent);
 
-    const response = await new Promise((fulfill, reject) => {
-      agent
-        .get(`/owner/setting/${ownerDetails.slug}`)
-        .set('Accept', 'application/json')
-        .expect(200)
-        .end((err, res) => {
-          if (err) return reject(err);
-
-          fulfill(res.body);
-        });
-    });
+    const response = agent
+      .get(`/owner/setting/${ownerDetails.slug}`)
+      .set('Accept', 'application/json')
+      .expect(200)
+      .then((res) => res.body);
 
     expect(response).toHaveProperty('name');
     expect(response).toHaveProperty('tables');
