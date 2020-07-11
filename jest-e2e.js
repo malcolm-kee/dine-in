@@ -5,7 +5,7 @@ module.exports = {
   moduleFileExtensions: ['js', 'json', 'ts'],
   rootDir: '.',
   testEnvironment: 'node',
-  testRegex: ['apps\\/.*\\.e2e-spec.ts$'],
+  testRegex: ['apps/.*.e2e-spec.ts$'],
   collectCoverageFrom: ['apps/**/*.ts', 'libs/**/*.ts'],
   coveragePathIgnorePatterns: [
     '<rootDir>\\/.*.spec.ts$',
