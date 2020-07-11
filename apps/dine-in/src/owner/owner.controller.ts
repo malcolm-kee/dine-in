@@ -14,7 +14,7 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   CreateAccountDto,
   UpdateAccountDto,
@@ -22,6 +22,7 @@ import {
 } from './owner.dto';
 import { OwnerService } from './owner.service';
 
+@ApiTags('owner')
 @Controller('owner')
 export class OwnerController {
   constructor(

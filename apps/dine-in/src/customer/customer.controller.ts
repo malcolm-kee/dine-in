@@ -1,8 +1,9 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { RequestSeatDto } from './customer.dto';
 import { CustomerService } from './customer.service';
 
+@ApiTags('customer')
 @Controller('customer')
 export class CustomerController {
   constructor(private readonly customerService: CustomerService) {}
@@ -13,7 +14,7 @@ export class CustomerController {
   @Post(':restaurant')
   requestSeats(
     @Param('restaurant') restaurant: string,
-    @Body() requestSeatDto: RequestSeatDto,
+    @Body() requestSeatDto: RequestSeatDto
   ) {
     return this.customerService.requestSeats(restaurant, requestSeatDto.pax);
   }

@@ -1,25 +1,33 @@
 import {
   RestaurantDataService,
+  RestaurantDocument,
   RestaurantReservationService,
   RestaurantTableDocument,
 } from '@app/restaurant-data';
+import { ReservationDocument } from '@app/restaurant-data/restaurant-data.type';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class CustomerService {
   constructor(
     private readonly restaurantService: RestaurantDataService,
-    private readonly reservationService: RestaurantReservationService,
+    private readonly reservationService: RestaurantReservationService
   ) {}
 
-  getDetails(name: string) {
+  getDetails(name: string): Promise<RestaurantDocument> {
     return this.restaurantService.getBySlug(name);
   }
 
-  async requestSeats(restaurantSlug: string, pax: number) {
+  async requestSeats(
+    restaurantSlug: string,
+    pax: number
+  ): Promise<{
+    confirmedTables: RestaurantTableDocument[];
+    reservation: ReservationDocument;
+  }> {
     // TODO: edge-case of paxNumber > total number of seat
     const nextReservationInQueue = await this.reservationService.getNextActiveItem(
-      restaurantSlug,
+      restaurantSlug
     );
 
     if (nextReservationInQueue) {
@@ -45,12 +53,9 @@ export class CustomerService {
     }
 
     await Promise.all(
-      confirmedTables.map(table =>
-        this.restaurantService.occupyTable(
-          restaurantSlug,
-          table._id.toString(),
-        ),
-      ),
+      confirmedTables.map((table) =>
+        this.restaurantService.occupyTable(restaurantSlug, table._id.toString())
+      )
     );
 
     const reservation =

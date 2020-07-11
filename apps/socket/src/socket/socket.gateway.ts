@@ -28,7 +28,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 
-  private cleanupClient(client: WebSocket) {
+  private cleanupClient(client: WebSocket): void {
     this.restaurantSubscribers.forEach((value, key) => {
       const clientIndex = value.indexOf(client);
       if (clientIndex > -1) {
@@ -40,7 +40,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     });
   }
 
-  handleConnection(client: WebSocket, msg: IncomingMessage) {
+  handleConnection(client: WebSocket, msg: IncomingMessage): void {
     if (msg.url) {
       const { query } = url.parse(msg.url, true);
       const restaurantToSubscribe = query && query.restaurant;
@@ -57,14 +57,14 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 
-  handleDisconnect(client: WebSocket) {
+  handleDisconnect(client: WebSocket): void {
     this.cleanupClient(client);
   }
 
   notifyEvent<Type extends keyof EventPayload>(
     type: Type,
     payload: EventPayload[Type]
-  ) {
+  ): Promise<unknown> {
     const subs = this.restaurantSubscribers.get(payload.restaurant);
     if (subs) {
       const dataToClient = JSON.stringify({

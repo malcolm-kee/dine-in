@@ -13,29 +13,29 @@ export class QueueController {
   constructor(
     @Inject(EVENT_HUB) private readonly client: ClientProxy,
     private readonly restaurantService: RestaurantDataService,
-    private readonly reservationService: RestaurantReservationService,
+    private readonly reservationService: RestaurantReservationService
   ) {}
 
   @EventPattern(Events.table_vacant)
-  async fulfillNextInQueue(data: EventPayload['table_vacant']) {
+  async fulfillNextInQueue(data: EventPayload['table_vacant']): Promise<void> {
     const nextReservation = await this.reservationService.getNextActiveItem(
-      data.restaurant,
+      data.restaurant
     );
 
     if (nextReservation) {
       const availableTables = await this.getVacantTables(
         data.restaurant,
-        nextReservation.pax,
+        nextReservation.pax
       );
 
       if (availableTables) {
         await Promise.all(
-          availableTables.map(t =>
+          availableTables.map((t) =>
             this.restaurantService.occupyTable(
               data.restaurant,
-              t._id.toString(),
-            ),
-          ),
+              t._id.toString()
+            )
+          )
         );
 
         await this.reservationService.closeReservation(nextReservation._id);
@@ -44,7 +44,7 @@ export class QueueController {
           id: nextReservation._id,
           restaurant: data.restaurant,
           queueNum: nextReservation.queueNum,
-          tableNames: availableTables.map(table => table.label),
+          tableNames: availableTables.map((table) => table.label),
         });
       }
     }
@@ -52,7 +52,7 @@ export class QueueController {
 
   private async getVacantTables(
     restaurant: string,
-    requiredSeats: number,
+    requiredSeats: number
   ): Promise<RestaurantTableDocument[] | null> {
     const restaurantDoc = await this.restaurantService.getBySlug(restaurant);
 
