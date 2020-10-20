@@ -2,6 +2,10 @@
 
 Web service for restaurant seating management system.
 
+- a REST service
+- a queue service using Redis
+- a WebSocket service
+
 ## Get Started
 
 There are two ways to start the services of this project:
