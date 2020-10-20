@@ -1,0 +1,1 @@
+web: node dist/apps/dine-in/main.js

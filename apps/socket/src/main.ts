@@ -21,7 +21,9 @@ async function bootstrap() {
   app.enableCors();
   app.useWebSocketAdapter(new WsAdapter(app));
 
-  const PORT = app.get(ConfigService).get(WEBSOCKET_PORT) || 8080;
+  const configService = app.get(ConfigService);
+
+  const PORT = configService.get(WEBSOCKET_PORT) || configService.get('PORT') || 8080;
 
   await app.listen(PORT, () => {
     console.log(`socket started at port ${PORT}.`);
