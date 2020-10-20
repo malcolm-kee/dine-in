@@ -23,7 +23,7 @@
     "test:e2e": "jest --config ./jest-e2e.js --runInBand --forceExit --coverage",
     "test:real": "jest --config ./jest-real.js --runInBand",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "heroku-postbuild": "./build-app"
+    "heroku-postbuild": "./build-app.sh"
   },
   "dependencies": {
     "@nestjs/common": "^7.0.0",
