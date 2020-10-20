@@ -16,6 +16,6 @@ elif [ "$BUILD_ENV" = "queue" ]; then
 elif [ "$BUILD_ENV" = "socket" ]; then
     yarn build:socket
 else
-    echo "Error: no build config for BUILD_ENV";
+    echo "Error: no build config specified for BUILD_ENV";
     exit 1;
 fi
