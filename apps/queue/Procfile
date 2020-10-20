@@ -1,1 +1,1 @@
-worker: node dist/apps/queue/main.js
+web: node dist/apps/queue/main.js
