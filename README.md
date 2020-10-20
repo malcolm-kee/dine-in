@@ -1,5 +1,7 @@
 # dine-in
 
+https://dine-in-rest.herokuapp.com/docs
+
 Web service for restaurant seating management system.
 
 - a REST service
